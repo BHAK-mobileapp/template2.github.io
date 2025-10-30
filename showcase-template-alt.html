@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project — Showcase (Alt)</title>
+  <meta name="description" content="Template showcase thay thế (phong cách khác), dùng cùng JSON schema với template trước.">
+  <!-- Fonts and main stylesheet -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="container nav__wrap">
+      <div class="brand">
+        <div class="logo" data-slot="brand.logo" aria-hidden="true"></div>
+        <h1 data-slot="brand.name">ProjectName</h1>
+      </div>
+      <div class="cta" data-slot="nav.cta"></div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- HERO (media left, text right) -->
+    <section class="hero">
+      <div class="hero__grid">
+        <div class="hero__media">
+          <img data-slot="hero.image" alt="App preview">
+        </div>
+        <div class="panel padded">
+          <div class="badges" data-slot="hero.badges"></div>
+          <h2 data-slot="hero.title">Tiêu đề dự án</h2>
+          <p class="lead" data-slot="hero.lead">Mô tả 1–2 câu.</p>
+          <div class="kpi" data-slot="hero.kpis"></div>
+          <div class="cta" data-slot="hero.cta"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem / Solution / Value -->
+    <section class="section">
+      <div class="cards">
+        <div class="card">
+          <h3>Problem</h3>
+          <ul class="bullets" data-slot="problem.items"></ul>
+        </div>
+        <div class="card">
+          <h3>Solution</h3>
+          <ul class="bullets" data-slot="solution.items"></ul>
+        </div>
+        <div class="card">
+          <h3>Value</h3>
+          <ul class="bullets" data-slot="value.items"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Advantage / Customer / Metrics (stats) -->
+    <section class="section">
+      <div class="cards">
+        <div class="card">
+          <h3>Advantage</h3>
+          <ul class="bullets" data-slot="advantage.items"></ul>
+        </div>
+        <div class="card">
+          <h3>Customer / User</h3>
+          <ul class="bullets" data-slot="customer.items"></ul>
+        </div>
+        <div class="card">
+          <h3>Metrics (KPI)</h3>
+          <div class="stats" data-slot="metrics.cards"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section card">
+      <h3 style="margin:0 0 12px 0">Tính năng chính (MVP)</h3>
+      <div class="features" data-slot="features.columns"></div>
+    </section>
+
+    <!-- Screenshots horizontal scroll -->
+    <section class="section card">
+      <h3 style="margin:0 0 12px 0">Ảnh màn hình</h3>
+      <div class="scroller" data-slot="screenshots.scroller"></div>
+    </section>
+
+    <!-- Tech / Team -->
+    <section class="section two">
+      <div class="card">
+        <h3>Công nghệ</h3>
+        <ul class="bullets" data-slot="tech.items"></ul>
+      </div>
+      <div class="card">
+        <h3>Nhóm</h3>
+        <ul class="bullets" data-slot="team.members"></ul>
+      </div>
+    </section>
+
+    <!-- Roadmap timeline -->
+    <section class="section card">
+      <h3 style="margin:0 0 12px 0">Lộ trình</h3>
+      <div class="timeline" data-slot="roadmap.timeline"></div>
+    </section>
+
+    <!-- Links / Contact -->
+    <section class="section two">
+      <div class="card">
+        <h3>Liên kết quan trọng</h3>
+        <ul class="bullets" data-slot="links.items"></ul>
+      </div>
+      <div class="card">
+        <h3>Liên hệ</h3>
+        <p data-slot="contact.primary"></p>
+        <p class="muted" data-slot="footer.note"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Inline config (same schema as the first template). 
+       You can swap this to fetch('config.json') if preferred. -->
+  <script id="config" type="application/json">
+  {
+    "meta": { "title": "YourProject — Showcase (Alt)" },
+    "brand": { "name": "YourProject", "logo": "assets/logo.png" },
+    "nav": {
+      "buttons": [
+        {"label": "Tính năng", "href": "#features"},
+        {"label": "Ảnh & Video", "href": "#screens"},
+        {"label": "GitHub Repo", "href": "https://github.com/your-org/your-repo", "target": "_blank", "variant": "primary"}
+      ]
+    }
+  }
+  </script>
+
+  <!-- Runtime -->
+  <script>
+  (function(){
+    const qs = (s)=>document.querySelector(s);
+    const qsa = (s)=>Array.from(document.querySelectorAll(s));
+
+    function navButtons(slot, buttons){
+      const wrap = document.querySelector(`[data-slot="${slot}"]`);
+      if (!wrap || !Array.isArray(buttons)) return;
+      wrap.innerHTML = buttons.map(b=>{
+        const cls = `btn ${b.variant==='primary'?'primary':''}`;
+        const tgt = b.target?` target="${b.target}" rel="noopener"`:"";
+        return `<a class="${cls}" href="${b.href}"${tgt}>${b.label}</a>`;
+      }).join("");
+    }
+    function fillText(slot, text){ const el=document.querySelector(`[data-slot="${slot}"]`); if(el&&text!=null) el.textContent=text; }
+    function fillHTML(slot, html){ const el=document.querySelector(`[data-slot="${slot}"]`); if(el&&html!=null) el.innerHTML=html; }
+    function fillImage(slot, src, alt){ const el=document.querySelector(`[data-slot="${slot}"]`); if(el&&src){ el.src=src; if(alt) el.alt=alt; } }
+    function list(slot, items){ const ul=document.querySelector(`[data-slot="${slot}"]`); if(!ul||!Array.isArray(items)) return; ul.innerHTML = items.map(li=>`<li>${li}</li>`).join(""); }
+    function chips(slot, items){ const wrap=document.querySelector(`[data-slot="${slot}"]`); if(!wrap||!Array.isArray(items)) return; wrap.innerHTML=items.map(t=>`<div class="chip">${t}</div>`).join(""); }
+    function badges(slot, items){ const wrap=document.querySelector(`[data-slot="${slot}"]`); if(!wrap||!Array.isArray(items)) return; wrap.innerHTML=items.map(t=>`<span class="badge">${t}</span>`).join(""); }
+    function featuresCols(slot, cols){
+      const grid=document.querySelector(`[data-slot="${slot}"]`); if(!grid||!Array.isArray(cols)) return;
+      grid.innerHTML = cols.map(c=>`
+        <div class="card">
+          <p class="pill">${c.title||""}</p>
+          <ul class="bullets">${(c.bullets||[]).map(b=>`<li>${b}</li>`).join("")}</ul>
+        </div>
+      `).join("");
+    }
+    function screenshotsScroller(slot, items){
+      const sc=document.querySelector(`[data-slot="${slot}"]`); if(!sc||!Array.isArray(items)) return;
+      sc.innerHTML = items.map(i=>`
+        <div class="shot"><img src="${i.src}" alt="${i.alt||''}"></div>
+      `).join("");
+    }
+    function metricsToCards(slot, rows){
+      const wrap=document.querySelector(`[data-slot="${slot}"]`); if(!wrap||!Array.isArray(rows)) return;
+      wrap.innerHTML = rows.map(r=>`
+        <div class="stat"><b>${r[0]}</b><span>${r[1]}</span></div>
+      `).join("");
+    }
+    function team(slot, members){
+      const ul=document.querySelector(`[data-slot="${slot}"]`); if(!ul||!Array.isArray(members)) return;
+      ul.innerHTML = members.map(m=>`<li><b>${m.name}</b> — ${m.role||""}</li>`).join("");
+    }
+    function links(slot, items){
+      const ul=document.querySelector(`[data-slot="${slot}"]`); if(!ul||!Array.isArray(items)) return;
+      ul.innerHTML = items.map(i=>{
+        const note = i.note ? ` — <span class="muted">${i.note}</span>` : "";
+        return `<li>${i.label}: <a href="${i.href}" target="_blank" rel="noopener">${i.href}</a>${note}</li>`;
+      }).join("");
+    }
+    function roadmapTimeline(slot, rows){
+      const tl=document.querySelector(`[data-slot="${slot}"]`); if(!tl||!Array.isArray(rows)) return;
+      tl.innerHTML = rows.map(r=>`
+        <div class="titem">
+          <div class="dot"></div>
+          <div><b>${r[0]}</b> — ${r[1]}<br><span class="muted">${r[2]||""}</span></div>
+        </div>
+      `).join("");
+    }
+
+    // Read config (inline). Keep same JSON schema as the first template.
+    let cfg={};
+    try{ cfg = JSON.parse(document.getElementById('config').textContent); } catch(e){ console.warn("Invalid config", e); cfg={}; }
+
+    // Optionally set title
+    if (cfg.meta?.title) document.title = cfg.meta.title;
+
+    // Brand & nav
+    fillText("brand.name", cfg.brand?.name || "ProjectName");
+    if (cfg.brand?.logo) document.querySelector('[data-slot="brand.logo"]').style.backgroundImage = `url('${cfg.brand.logo}')`;
+    navButtons("nav.cta", cfg.nav?.buttons || []);
+
+    // Hero
+    badges("hero.badges", cfg.hero?.badges || []);
+    fillText("hero.title", cfg.hero?.title || "Tiêu đề dự án");
+    fillText("hero.lead", cfg.hero?.lead || "");
+    chips("hero.kpis", cfg.hero?.kpis || []);
+    navButtons("hero.cta", cfg.hero?.cta || []);
+    fillImage("hero.image", cfg.hero?.image || "", "App preview");
+
+    // Sections
+    list("problem.items", cfg.problem?.items || []);
+    list("solution.items", cfg.solution?.items || []);
+    list("value.items", cfg.value?.items || []);
+    list("advantage.items", cfg.advantage?.items || []);
+    list("customer.items", cfg.customer?.items || []);
+
+    // Metrics as cards
+    metricsToCards("metrics.cards", cfg.metrics?.rows || []);
+
+    // Features, Screens, Tech, Team
+    featuresCols("features.columns", cfg.features?.columns || []);
+    screenshotsScroller("screenshots.scroller", cfg.screenshots?.items || []);
+    list("tech.items", cfg.tech?.items || []);
+    team("team.members", cfg.team?.members || []);
+
+    // Roadmap
+    roadmapTimeline("roadmap.timeline", cfg.roadmap?.rows || []);
+
+    // Links & contact
+    links("links.items", cfg.links?.items || []);
+    fillHTML("contact.primary", cfg.contact?.primary || "");
+    fillText("footer.note", (cfg.contact?.footerNote || "").replace("{group}", cfg.brand?.name || "Nhóm"));
+  })();
+  </script>
+</body>
+</html>
